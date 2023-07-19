@@ -7,7 +7,7 @@ I do preserve original video files in the same folder👌. Also, all subtitles a
  ## Exclusion Mechanism
 The script places a `converted_files.txt` in your media library, none of the titles inside the txt will be rendered again. If you exclude the txt, the program will render the same video files again, creating another `converted_files.txt`.
 
-* A webapp that can customize the ffmpeg options is planned someday in the future when my coding skills are at least decent 😸.
+* A webapp that can customize the ffmpeg options and watch progress is planned someday in the future when my coding skills are at least decent 😸.
 
 🆓 Source code https://github.com/rodhfr/pytarr 
 
