@@ -1,10 +1,12 @@
-version: '3.9'
+version: '3'
 services:
-  my-service:
-    image: my-python-image:latest
+  converter:
+    build:
+      context: .
+      dockerfile: Dockerfile
     volumes:
-      - /home/rodhfr/Documents/video example/:/app/Videos
+      - ./Videos:/app/Videos
     restart: unless-stopped
     environment:
       - TZ=America/Recife
-    command: bash -c "sleep 300 && python app.py"
+    command: bash -c "sleep 300 && python script.py"
