@@ -14,7 +14,13 @@ def process_file(file_path, converted_files):
             subprocess.call(['ffmpeg', '-i', file_path, '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-s', '1280x720', '-crf', '24', '-x264-params', 'profile=main', '-map', '0', '-c:a', 'copy', '-c:s', 'copy', '-preset', 'veryfast', '-tune', 'fastdecode', output_path])
             copy_file(file_path, output_file_name, '.srt')
             copy_file(file_path, output_file_name, '.nfo')
-        
+
+            # Copy .en.srt files
+            srt_file_path = os.path.join(file_dir, f"{file_name}.en.srt")
+            if os.path.exists(srt_file_path):
+                dest_srt_file_path = os.path.join(file_dir, f"{output_file_name}.en.srt")
+                shutil.copy2(srt_file_path, dest_srt_file_path)
+
         converted_files.add(file_name)
 
 def copy_file(file_path, output_file_name, file_extension):
