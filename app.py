@@ -1,14 +1,21 @@
 import os
+import re
 import subprocess
 import shutil
 import tempfile
+
+def extract_resolution(filename):
+    # Use regular expression to extract the resolution from the filename
+    match = re.search(r'-(\d+p)', filename)
+    return match.group(1) if match else ""
 
 def process_file(file_path, converted_files):
     file_dir, file_name = os.path.split(file_path)
     file_name, file_ext = os.path.splitext(file_name)
 
     if file_ext.lower() in ['.mkv', '.mp4'] and not file_name.endswith(' - 720p'):
-        output_file_name = f"{file_name} - 720p{file_ext}"
+        original_resolution = extract_resolution(file_name)
+        output_file_name = file_name.replace(original_resolution, ' 720p') + file_ext
         output_path = os.path.join(file_dir, output_file_name)
 
         if not os.path.exists(output_path):
@@ -23,8 +30,8 @@ def process_file(file_path, converted_files):
             os.rename(temp_output_path, output_path)
 
             # Copy .srt files
-            copy_file(file_path, output_file_name, '.srt')
-            copy_file(file_path, output_file_name, '.nfo')
+            copy_file(file_path, file_name, '.srt')
+            copy_file(file_path, file_name, '.nfo')
 
             # Copy .en.srt files
             srt_file_path = os.path.join(file_dir, f"{file_name}.en.srt")
@@ -35,9 +42,8 @@ def process_file(file_path, converted_files):
         converted_files.add(file_name)
 
 def copy_file(file_path, output_file_name, file_extension):
-    file_dir, file_name = os.path.split(file_path)
-    file_name, _ = os.path.splitext(file_name)
-    source_file_path = os.path.join(file_dir, file_name + file_extension)
+    file_dir, _ = os.path.split(file_path)
+    source_file_path = os.path.join(file_dir, f"{output_file_name}{file_extension}")
 
     if os.path.exists(source_file_path):
         dest_file_path = os.path.join(file_dir, f"{output_file_name}{file_extension}")
