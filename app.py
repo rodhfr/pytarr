@@ -1,21 +1,8 @@
 import os
 import subprocess
 import shutil
-from flask import Flask, render_template, request
 
-app = Flask(__name__)
-
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    if request.method == 'POST':
-        ffmpeg_command = request.form['ffmpeg_command']
-        save_ffmpeg_command(ffmpeg_command)
-        return 'FFmpeg command updated successfully!'
-    else:
-        ffmpeg_command = get_ffmpeg_command()
-        return render_template('index.html', ffmpeg_command=ffmpeg_command)
-
-def process_file(file_path, converted_files, ffmpeg_command):
+def process_file(file_path, converted_files):
     file_dir, file_name = os.path.split(file_path)
     file_name, file_ext = os.path.splitext(file_name)
 
@@ -24,8 +11,7 @@ def process_file(file_path, converted_files, ffmpeg_command):
         output_path = os.path.join(file_dir, output_file_name)
 
         if not os.path.exists(output_path):
-            command = ['ffmpeg', '-i', file_path] + ffmpeg_command.split() + ['-map', '0', '-c:a', 'copy', '-c:s', 'copy', '-preset', 'medium', '-tune', 'fastdecode', output_path]
-            subprocess.call(command)
+            subprocess.call(['ffmpeg', '-i', file_path, '-c:v', 'libx265', '-pix_fmt', 'yuv420p', '-crf', '28', '-x265-params', 'profile=main', '-map', '0', '-c:a', 'copy', '-c:s', 'copy', '-preset', 'medium', '-tune', 'fastdecode', output_path])
             copy_file(file_path, output_file_name, '.srt')
             copy_file(file_path, output_file_name, '.nfo')
         
@@ -48,29 +34,13 @@ def process_directory(directory):
         with open(record_file, 'r') as file:
             converted_files = set(file.read().splitlines())
 
-    ffmpeg_command = get_ffmpeg_command()
-
     for root, _, files in os.walk(directory):
         for file_name in files:
             file_path = os.path.join(root, file_name)
-            process_file(file_path, converted_files, ffmpeg_command)
+            process_file(file_path, converted_files)
 
     with open(record_file, 'w') as file:
         file.write('\n'.join(converted_files))
 
-def save_ffmpeg_command(ffmpeg_command):
-    with open('ffmpeg_command.txt', 'w') as file:
-        file.write(ffmpeg_command)
-
-def get_ffmpeg_command():
-    if os.path.exists('ffmpeg_command.txt'):
-        with open('ffmpeg_command.txt', 'r') as file:
-            return file.read()
-    else:
-        return ''
-
-if __name__ == '__main__':
-    target_directory = '/app/Videos'
-    process_directory(target_directory)
-    app.run(host='0.0.0.0', port=5252)
-
+target_directory = '/app/Videos'
+process_directory(target_directory)
