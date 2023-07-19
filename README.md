@@ -19,7 +19,7 @@ The script places a `converted_files.txt` in your media library, none of the tit
 version: '3.9'
 services:
   my-service:
-    image: pytarr:0.3
+    image: pytarr:0.4
     volumes:
       - /path/to/media/file/:/app/Videos
     restart: unless-stopped
