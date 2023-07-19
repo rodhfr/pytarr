@@ -3,6 +3,9 @@ FROM python:3.9
 COPY . /app
 WORKDIR /app
 
+RUN apt update && apt upgrade -y
+RUN apt install ffmpeg -y
+
 ENV PUID=1000
 ENV PGID=1000
 
@@ -14,9 +17,6 @@ RUN chown -R appuser:appgroup /app && chmod -R g=u /app
 USER appuser
 
 VOLUME /app/Videos
-
-RUN apt update && apt upgrade -y
-RUN apt install ffmpeg -y
 
 
 
