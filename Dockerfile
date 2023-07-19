@@ -2,7 +2,7 @@ FROM python:3.9
 
 COPY . /app
 WORKDIR /app
-RUN groupadd -g $GROUP_ID appgroup && useradd -u $GUID -g $UID -m appuser
+RUN groupadd -g $GROUP_ID appgroup && useradd -u $PGID -g $PUID -m appuser
 RUN chown -R appuser:appgroup /app && chmod -R g=u /app
 USER appuser
 VOLUME /app/Videos
