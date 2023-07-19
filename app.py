@@ -70,7 +70,7 @@ def get_ffmpeg_command():
         return ''
 
 if __name__ == '__main__':
-    target_directory = '/home/rodhfr/Videos/Rodolfo/filme/root/'
+    target_directory = '/app/Videos'
     process_directory(target_directory)
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5252)
 
