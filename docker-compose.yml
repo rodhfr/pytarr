@@ -5,8 +5,6 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - /home/rodhfr/Docker/pytarr/app.py:/app/app.py
-      - /home/rodhfr/Docker/pytarr/templates:/app/templates
       - /home/rodhfr/Documents/video example/:/app/Videos
     restart: unless-stopped
     environment:
