@@ -1,12 +1,12 @@
-version: '3'
+version: '3.9'
 services:
-  converter:
-    build:
-      context: .
-      dockerfile: Dockerfile
+  my-service:
+    image: pytarr:latest
     volumes:
-      - ./Videos:/app/Videos
+      - /home/rodhfr/Downloads/test-mp4/:/app/Videos
     restart: unless-stopped
     environment:
       - TZ=America/Recife
-    command: bash -c "sleep 300 && python script.py"
+      - PUID=1000
+      - PGID=1000 
+    command: bash -c "sleep 300 && python app.py"
