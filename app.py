@@ -1,6 +1,7 @@
 import os
 import subprocess
 import shutil
+import tempfile
 
 def process_file(file_path, converted_files):
     file_dir, file_name = os.path.split(file_path)
@@ -11,7 +12,17 @@ def process_file(file_path, converted_files):
         output_path = os.path.join(file_dir, output_file_name)
 
         if not os.path.exists(output_path):
-            subprocess.call(['ffmpeg', '-i', file_path, '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-s', '1280x720', '-crf', '24', '-x264-params', 'profile=main', '-map', '0', '-c:a', 'copy', '-c:s', 'copy', '-preset', 'veryfast', '-tune', 'fastdecode', output_path])
+            # Create a temporary cache file with the .part extension inside the .cache folder
+            cache_dir = os.path.join(file_dir, '.cache')
+            os.makedirs(cache_dir, exist_ok=True)
+            temp_output_path = os.path.join(cache_dir, f"{output_file_name}.part")
+
+            subprocess.call(['ffmpeg', '-i', file_path, '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-s', '1280x720', '-crf', '24', '-x264-params', 'profile=main', '-map', '0', '-c:a', 'copy', '-c:s', 'copy', '-preset', 'veryfast', '-tune', 'fastdecode', temp_output_path])
+
+            # Move the temporary cache file to the final output path
+            os.rename(temp_output_path, output_path)
+
+            # Copy .srt files
             copy_file(file_path, output_file_name, '.srt')
             copy_file(file_path, output_file_name, '.nfo')
 
@@ -44,6 +55,11 @@ def process_directory(directory):
         for file_name in files:
             file_path = os.path.join(root, file_name)
             process_file(file_path, converted_files)
+
+    # Clear the .cache folder after processing
+    cache_dir = os.path.join(directory, '.cache')
+    if os.path.exists(cache_dir):
+        shutil.rmtree(cache_dir)
 
     with open(record_file, 'w') as file:
         file.write('\n'.join(converted_files))
