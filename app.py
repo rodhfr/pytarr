@@ -13,9 +13,9 @@ def process_file(file_path, converted_files):
     file_dir, file_name = os.path.split(file_path)
     file_name, file_ext = os.path.splitext(file_name)
 
-    if file_ext.lower() in ['.mkv', '.mp4'] and not file_name.endswith(' - 720p'):
+    if file_ext.lower() in ['.mkv', '.mp4', '.avi'] and not file_name.endswith(' - 720p'):
         original_resolution = extract_resolution(file_name)
-        output_file_name = file_name.replace(original_resolution, ' 720p') + file_ext
+        output_file_name = re.sub(r'(-\d+p|\.\w+)$', '', file_name) + ' - 720p' + file_ext
         output_path = os.path.join(file_dir, output_file_name)
 
         if not os.path.exists(output_path):
