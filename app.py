@@ -11,7 +11,7 @@ def process_file(file_path, converted_files):
         output_path = os.path.join(file_dir, output_file_name)
 
         if not os.path.exists(output_path):
-            subprocess.call(['ffmpeg', '-i', file_path, '-c:v', 'libx265', '-pix_fmt', 'yuv420p', '-crf', '28', '-x265-params', 'profile=main', '-map', '0', '-c:a', 'copy', '-c:s', 'copy', '-preset', 'medium', '-tune', 'fastdecode', output_path])
+            subprocess.call(['ffmpeg', '-i', file_path, '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '24', '-x264-params', 'profile=main', '-map', '0', '-c:a', 'copy', '-c:s', 'copy', '-preset', 'veryfast', '-tune', 'fastdecode', output_path])
             copy_file(file_path, output_file_name, '.srt')
             copy_file(file_path, output_file_name, '.nfo')
         
