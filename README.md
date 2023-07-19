@@ -5,7 +5,7 @@ My ffmpeg command to transcode is easily modifiable inside `app.py` file.
 I do preserve original video files in the same folder👌. Also, all subtitles and audio tracks are copied to the transcoded file so you don't have to search for them again 🐊. 
 
  ## Exclusion Mechanism
-The script places a `converted_files.txt` in your media library, none of the titles inside of the txt will be rendered again. If you exclude the txt the script, the program will render the same video files again, creating another `converted_files.txt`.
+The script places a `converted_files.txt` in your media library, none of the titles inside of the txt will be rendered again. If you exclude the txt, the program will render the same video files again, creating another `converted_files.txt`.
 
 A webapp that can customize the ffmpeg options is planned someday in the future when my coding skills are at least decent 😸.
 
