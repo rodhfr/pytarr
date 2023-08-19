@@ -1,3 +1,5 @@
+# This is Alpha software, do not work well in any shape or form. Is made for study only.
+ 
  ## Hello, how I work?
 I'm just a python script 🐍 that crawls over you media library and constantly searching for all mkv, mp4 or avi files to a copy of them using x264 8bit while appending `"- 720p"` which is useful for jellyfin identification. 
 My ffmpeg command to transcode is easily modifiable inside `app.py` file.
